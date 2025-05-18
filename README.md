@@ -94,9 +94,10 @@ Para configurar e rodar o SmartPath localmente, siga os passos abaixo:
 2.  Você precisa servir esses arquivos estaticamente. A maneira mais simples para desenvolvimento é usar um servidor web simples do Python:
     ```bash
     cd caminho/para/sua/pasta/frontend
-    python -m http.server 8000
-```
-    (Nota: Se o backend já está rodando na porta 8000, use outra porta para o frontend, como 8080: `python -m http.server 8080`. Certifique-se de que a URL do backend no `script.js` (`http://127.0.0.1:8000`) esteja correta).```
+    python -m http.server 8000 ```
+    
+**(Nota: Se o backend já está rodando na porta 8000, use outra porta para o frontend, como 8080: `python -m http.server 8080`. Certifique-se de que a URL do backend no `script.js` (`http://127.0.0.1:8000`) esteja correta).**
+
 3.  Abra seu navegador e acesse `http://localhost:8000` (ou a porta que você usou para o servidor estático do frontend).
 
 ### Configuração do Google Cloud
