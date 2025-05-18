@@ -90,3 +90,7 @@ Diagrama.png    ```
 O diagrama abaixo ilustra a interação entre os componentes da aplicação:
 
 ![SmartPath](Diagrama.png)
+
+![SmartPath Tela Inicial](App.png)
+![SmartPath Tela de CarregandoRota](CarregandoRota.png)
+![SmartPath Tela de Rota Definida](RotaDefinida.png)
