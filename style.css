@@ -1,150 +1,328 @@
+/* style.css */
+
+/* --- Variáveis CSS (Melhor organização e facilidade de mudança de tema) --- */
+:root {
+    --primary-color: #007bff; /* Azul vibrante para ações primárias */
+    --secondary-color: #6c757d; /* Cinza para botões secundários */
+    --action-color: #28a745; /* Verde para ações importantes (ex: Compartilhar) */
+    --background-color: #f8f9fa; /* Fundo claro geral */
+    --card-background: #ffffff; /* Fundo para cards/seções */
+    --text-color: #212529; /* Cor de texto principal escura */
+    --light-text-color: #ffffff; /* Cor de texto para fundos escuros */
+    --border-color: #dee2e6; /* Cor de borda sutil */
+    --focus-outline-color: #0056b3; /* Cor para o contorno de foco acessível */
+
+    --font-family: 'Arial', sans-serif; /* Fonte clara e legível */
+    --base-font-size: 1em; /* Tamanho base (normalmente 16px) */
+    --padding-medium: 15px;
+    --padding-large: 20px;
+    --margin-medium: 15px;
+    --margin-large: 20px;
+    --border-radius: 8px; /* Bordas mais arredondadas */
+    --box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);/* Sombra mais suave */
+}
+
+/* --- Estilos Gerais --- */
 body {
-    font-family: sans-serif;
+    font-family: var(--font-family);
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background-color);
     margin: 0;
-    background-color: #f4f4f4;
-    color: #333;
+    padding: var(--padding-large); /* Adiciona padding nas laterais */
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start; /* Alinha ao topo do container */
     min-height: 100vh;
+    box-sizing: border-box; /* Inclui padding e borda no tamanho total */
 }
 
 .app-container {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    width: 90%;
-    max-width: 1000px;
+    background-color: var(--card-background);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    overflow: hidden; /* Garante que cantos arredondados funcionem com header */
+    width: 100%; /* Ocupa largura total no mobile */
+    max-width: 500px; /* Largura máxima para desktop */
+    margin-top: var(--margin-large); /* Espaço do topo */
+    margin-bottom: var(--margin-large); /* Espaço inferior */
+    display: flex; /* Usar flexbox para organizar header, main e footer */
+    flex-direction: column;
 }
 
 .app-header {
-    background-color: #007bff;
-    color: #fff;
-    padding: 20px;
+    background-color: var(--primary-color);
+    color: var(--light-text-color);
+    padding: var(--padding-large);
     text-align: center;
-    font-size: 1.5em;
+    font-size: 1.8em; /* Aumenta um pouco o tamanho do título */
+    font-weight: bold;
 }
 
 .app-main {
-    padding: 20px 20px;
-}
-
-.screen {
-    display: none;
-    width: 100%
-}
-
-.screen.active {
-    display: block;
-    width: 100%
-}
-
-h2 {
-    color: #333;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.large-button {
-    display: block;
-    width: 100%;
-    padding: 15px;
-    margin-bottom: 15px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    text-align: center;
-    text-decoration: none;
-}
-
-.primary {
-    background-color: #007bff;
-    color: #fff;
-}
-
-.secondary {
-    background-color: #f8f9fa;
-    color: #333;
-    border: 1px solid #ddd;
-}
-
-.action {
-    background-color: #28a745;
-    color: #fff;
-}
-
-.large-button:hover {
-    opacity: 0.9;
-}
-
-.input-group {
-    margin-bottom: 20px;
-    padding: -10px;
-}
-
-.input-group label {
-    display: block;
-    margin-bottom: 5px;
-    color: #555;
-}
-
-.input-group input[type="text"] {
-    width: 100%;
-    padding-bottom: 10px ;
-    padding-top: 10px ;
-    padding-right: -30px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    align-content: center;
-    font-size: 1em;
-}
-
-.button-group {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.instructions {
-    background-color: #e9ecef;
-    padding: 15px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    font-size: 1.1em;
-    text-align: center;
-}
-
-.setting-item {
-    margin-bottom: 20px;
-}
-
-.setting-item label {
-    display: block;
-    margin-bottom: 5px;
-    color: #555;
-}
-
-.setting-item input[type="range"],
-.setting-item select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1em;
+    padding: var(--padding-large); /* Padding interno maior */
+    flex-grow: 1; /* Faz o main ocupar o espaço restante */
 }
 
 .app-footer {
     text-align: center;
-    padding: 15px;
-    background-color: #f4f4f4;
-    color: #777;
+    padding: var(--padding-medium);
+    background-color: #e9ecef; /* Um cinza claro diferente */
+    color: var(--secondary-color); /* Cor suave para o texto do footer */
     font-size: 0.9em;
+    border-top: 1px solid var(--border-color); /* Linha separadora */
 }
 
-/* Estilos para Alto Contraste */
+/* --- Telas --- */
+.screen {
+    display: none;
+    width: 100%; /* Garante que as telas ocupem a largura do main */
+}
+
+.screen.active {
+    display: block;
+}
+
+/* --- Títulos das Seções --- */
+h2 {
+    color: var(--text-color); /* Usa a cor de texto principal */
+    margin-bottom: var(--margin-large);
+    text-align: center;
+    font-size: 1.6em;
+}
+
+/* --- Botões Grandes (Melhorando padding e fonte) --- */
+.large-button {
+    display: block;
+    width: 100%; /* Garante largura total */
+    padding: 18px var(--padding-medium); /* Padding maior para área de clique */
+    margin-bottom: var(--margin-medium);
+    border: none;
+    border-radius: var(--border-radius); /* Usa variável de borda */
+    font-size: 1.2em; /* Aumenta a fonte do botão */
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, opacity 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease; /* Adicionar box-shadow à transição */
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra leve nos botões */
+    box-sizing: border-box; /* Inclui padding na largura */
+}
+
+.large-button.primary {
+    background-color: var(--primary-color);
+    color: var(--light-text-color);
+}
+
+.large-button.secondary {
+    background-color: var(--background-color); /* Fundo mais claro */
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.large-button.action {
+    background-color: var(--action-color);
+    color: var(--light-text-color);
+}
+
+/* --- Estados de Interação (Hover e Focus) --- */
+.large-button:hover {
+    opacity: 0.95; /* Efeito de opacidade sutil */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra aumenta no hover */
+    transform: translateY(-2px); /* Levanta um pouco */
+}
+
+.large-button:active {
+    transform: scale(0.98) translateY(0);; /* Efeito de clique sutil */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Sombra diminui no clique */
+}
+
+.large-button:focus {
+    outline: 3px solid var(--focus-outline-color); /* Contorno claro e visível para acessibilidade */
+    outline-offset: 2px; /* Espaço entre o contorno e o botão */
+    /* Remover outline padrão se necessário, mas o contorno personalizado é melhor */
+    /* outline: none; */
+}
+
+/* --- Grupos de Botões --- */
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espaço entre os botões usando gap */
+    margin-top: var(--margin-large);
+}
+
+/* --- Inputs e Labels --- */
+.input-group {
+    margin-bottom: var(--margin-large);
+    text-align: center; /* Alinha o grupo à esquerda */
+    border-color: var(--primary-color);
+    /*box-shadow: 0 0 8px rgba(0, 123, 255, 0.4); /* Sombra mais visível no foco */
+    outline: none;
+}
+
+.input-group label {
+    display: block; /* Label em sua própria linha */
+    margin-bottom: 8px; /* Espaço abaixo do label */
+    font-weight: bold;
+    color: var(--text-color);
+    font-size: 1.1em; /* Fonte levemente maior */
+}
+
+.input-group input[type="text"] {
+    width: 100%; /* Ocupa a largura total do contêiner pai */
+    padding: 12px; /* Padding interno generoso */
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 1.1em; /* Fonte maior dentro do input */
+    box-sizing: border-box; /* Inclui padding e borda na largura total */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-group input[type="text"]:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 6px rgba(0, 123, 255, 0.3); /* Sombra suave no foco */
+    outline: none; /* Remover outline padrão se a sombra for suficiente */
+}
+
+/* --- Remove a centralização da tag <center> no HTML --- */
+.input-group center {
+    display: block; /* Trata o conteúdo da center como bloco */
+    text-align: initial; /* Remove o text-align: center aplicado pela tag center */
+}
+
+.input-group center label,
+.input-group center input {
+    /* Garante que os elementos internos herdem o comportamento de bloco/largura */
+     display: block;
+     width: 100%;
+     box-sizing: border-box;
+}
+
+
+/* --- Indicador de Loading --- */
+.loading-indicator {
+    display: flex; /* Usar flexbox para centralizar */
+    justify-content: center;
+    align-items: center;
+    margin-top: var(--margin-medium);
+    margin-bottom: var(--margin-medium);
+    min-height: 30px; /* Garante um espaço mínimo mesmo vazio */
+    /* JS controla o display: none/flex */
+    display: none; /* Oculto por padrão */
+}
+
+.loading-indicator svg {
+    width: 40px; /* Aumenta um pouco o tamanho */
+    height: 40px;
+    color: var(--primary-color); /* Define a cor do ícone SVG */
+}
+
+/* Animação de rotação (já presente, só garantir a cor) */
+@keyframes rotate {
+    to { transform: rotate(360deg); }
+}
+
+.loading-indicator svg circle {
+     stroke: currentColor; /* Usa a cor definida no SVG parent */
+}
+
+
+/* --- Área do Mapa --- */
+#map {
+    height: 350px; /* Altura do mapa, pode ajustar */
+    width: 100%;
+    margin-bottom: var(--margin-large);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    background-color: #e0e0e0; /* Cor de fundo enquanto carrega */
+    /* JS controla o display: none/block */
+    display: none;
+}
+
+/* --- Instruções Detalhadas --- */
+.detailed-instructions-container { /* Renomeado para evitar conflito, se houver */
+    margin-top: var(--margin-large);
+    text-align: left;
+    background-color: var(--background-color);
+    padding: var(--padding-medium);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    /* Propriedades para quebrar texto longo */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    /* Adicionado para melhor espaçamento */
+    line-height: 1.7;
+}
+
+#current-detailed-instruction {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: var(--primary-color); /* Destacar instrução atual */
+    /* Garante que a instrução atual não se misture com os próximos passos */
+    display: block;
+}
+
+#next-steps {
+    list-style: none; /* Remove marcadores padrão */
+    padding: 0;
+    margin: 0;
+    margin-top: 15px; /* Espaço acima da lista de próximos passos */
+}
+
+#next-steps li {
+    background-color: var(--card-background); /* Fundo para cada passo */
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 10px;
+    margin-bottom: 10px; /* Espaço entre os passos */
+    font-size: 1em;
+    line-height: 1.5;
+    word-wrap: break-word; /* Garante quebra de texto nos itens da lista */
+    overflow-wrap: break-word;
+}
+
+/* --- Estilos para a tela de Configurações --- */
+#settings-screen h2 {
+     margin-bottom: var(--margin-large);
+}
+
+.setting-item {
+    margin-bottom: var(--margin-large);
+    text-align: left;
+}
+
+.setting-item label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 1.1em;
+    color: var(--text-color);
+}
+
+.setting-item input[type="range"],
+.setting-item select {
+    display: block;
+    width: 100%;
+    margin-top: 5px;
+    font-size: 1em;
+    padding: 10px; /* Aumenta o padding */
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-sizing: border-box; /* Inclui padding e borda no tamanho */
+}
+
+/* Estilo para o valor do range */
+#font-size-value {
+    display: inline-block; /* Exibe ao lado */
+    margin-left: 10px;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+
+/* --- Estilos para Alto Contraste (Refinados para usar variáveis) --- */
 .high-contrast body {
     background-color: #000;
     color: #fff;
@@ -152,11 +330,11 @@ h2 {
 
 .high-contrast .app-container {
     background-color: #333;
-    box-shadow: 0 2px 10px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
 }
 
 .high-contrast .app-header {
-    background-color: #ffc107;
+    background-color: #ffff00; /* Amarelo forte */
     color: #000;
 }
 
@@ -165,115 +343,136 @@ h2 {
 }
 
 .high-contrast .large-button.primary {
-    background-color: #ffc107;
+    background-color: #ffff00; /* Amarelo forte */
     color: #000;
+    border-color: #000; /* Borda para alto contraste */
 }
 
 .high-contrast .large-button.secondary {
     background-color: #555;
-    color: #eee;
-    border-color: #777;
+    color: #fff;
+    border-color: #fff; /* Borda branca */
 }
 
 .high-contrast .large-button.action {
-    background-color: #198754;
-    color: #fff;
+    background-color: #00ffff; /* Ciano forte */
+    color: #000;
+    border-color: #000;
 }
+
+/* Foco em Alto Contraste */
+.high-contrast .large-button:focus,
+.high-contrast input[type="text"]:focus,
+.high-contrast select:focus,
+.high-contrast input[type="range"]:focus {
+    outline: 3px solid #ff00ff; /* Magenta forte */
+    outline-offset: 2px;
+    border-color: #ff00ff; /* Muda também a borda */
+    box-shadow: none; /* Remove sombra para clareza */
+}
+
 
 .high-contrast .input-group label,
 .high-contrast .setting-item label {
-    color: #ccc;
+    color: #fff;
 }
 
 .high-contrast .input-group input[type="text"],
 .high-contrast .setting-item input[type="range"],
 .high-contrast .setting-item select {
     background-color: #444;
-    color: #eee;
-    border-color: #666;
+    color: #fff;
+    border-color: #fff;
 }
 
-.high-contrast .instructions {
-    background-color: #444;
+.high-contrast .detailed-instructions-container { /* Usa o novo nome da classe */
+    background-color: #222;
     color: #eee;
+    border-color: #555;
+}
+
+.high-contrast #current-detailed-instruction {
+    color: #ffff00; /* Amarelo forte para a instrução atual */
+}
+
+.high-contrast #next-steps li {
+    background-color: #333;
+    color: #ccc;
+    border-color: #555;
 }
 
 .high-contrast .app-footer {
-    background-color: #333;
-    color: #aaa;
+    background-color: #222;
+    color: #bbb;
+    border-top-color: #555;
+}
+
+.high-contrast .loading-indicator svg circle {
+     stroke: #ffff00; /* Amarelo forte para o loading */
 }
 
 
-.detailed-instructions {
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 5px;
-    margin-bottom: 20px;
+/* --- Estilos para Tamanho de Fonte Ajustável (Assumindo JS ajusta a classe/variável) --- */
+/* Você pode adicionar classes ao body como .font-large, .font-xlarge */
+.font-large body { font-size: 1.1em; }
+.font-xlarge body { font-size: 1.2em; }
+/* Ou ajustar diretamente a variável CSS --base-font-size via JS */
+/* document.documentElement.style.setProperty('--base-font-size', value + 'px'); */
+/* E então todos os em/rem se ajustarão */
+
+
+/* --- Layout Responsivo (Básico) --- */
+@media (max-width: 600px) {
+    body {
+        padding: var(--padding-medium); /* Menos padding em telas pequenas */
+    }
+
+    .app-main {
+        padding: var(--padding-medium); /* Menos padding interno */
+    }
+
+    .app-header {
+        font-size: 1.5em; /* Título menor em telas pequenas */
+        padding: var(--padding-medium);
+    }
+
+    h2 {
+        font-size: 1.3em; /* Títulos de seção menores */
+    }
+
+    .large-button {
+        padding: 15px var(--padding-medium); /* Padding ajustado */
+        font-size: 1.1em;
+    }
+}
+
+/* Estilo para mensagens de status da fala */
+.status-message {
+    margin-top: 15px;
     font-size: 1em;
-    text-align: left;
-    border: 1px solid #eee;
-    /* Adicionado para melhor espaçamento e quebra de linha */
-    white-space: pre-line;
-    word-wrap: break-word;
-}
-
-.detailed-instructions p#current-detailed-instruction {
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #333;
-}
-
-.detailed-instructions ul#next-steps {
-    list-style-type: disc;
-    padding-left: 20px;
-    color: #555;
-}
-
-.detailed-instructions ul#next-steps li {
-    margin-bottom: 5px;
-}
-
-.high-contrast .detailed-instructions {
-    background-color: #444;
-    color: #eee;
-    border-color: #666;
-}
-
-.high-contrast .detailed-instructions p#current-detailed-instruction {
-    color: #fff;
-}
-
-.high-contrast .detailed-instructions ul#next-steps {
-    color: #ccc;
-}
-
-/* Estilos para o ícone de loading */
-.loading-indicator {
+    color: #555; /* Cor padrão para mensagens */
     text-align: center;
-    margin-top: 10px;
-    margin-bottom: 20px; /* Adicionado para espaçamento */
-    display: none
 }
 
-.loading-indicator svg {
-    width: 30px;
-    height: 30px;
-    animation: rotate 1s linear infinite; /* Se você estiver usando a animação do SVG */
+/* Estilo para mensagens de erro */
+.status-message.error {
+    color: red; /* Cor vermelha para erros */
+    font-weight: bold;
 }
 
-@keyframes rotate {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+/* Estilo para o input quando o reconhecimento de voz estiver ativo */
+.input-group input[type="text"].listening {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.6);
 }
 
-/* Adicionado para garantir que o contêiner do mapa seja visível e tenha tamanho */
-#map {
-    height: 400px; /* Altura do mapa */
-    width: 100%; /* Largura do mapa */
-    margin-bottom: 20px;
-    background-color: #e0e0e0; /* Cor de fundo enquanto carrega */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
 }

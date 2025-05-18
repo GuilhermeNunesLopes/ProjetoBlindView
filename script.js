@@ -7,6 +7,9 @@ const nextStepsList = document.getElementById('next-steps');
 const destinationInput = document.getElementById('destination-input');
 const startNavigationButton = document.querySelector('#set-destination .button-group .primary');
 const loadingIndicator = document.getElementById('loading-indicator');
+const startSpeechRecognitionButton = document.getElementById('start-speech-recognition');
+const speechStatusMessage = document.getElementById('speech-status-message');
+
 
 let currentLocation = null;
 let watchId = null; // Variável para armazenar o ID do watcher de geolocalização
@@ -20,6 +23,264 @@ let userLocationMarker; // Marcador da localização do usuário (agora Advanced
 let routePolyline; // Objeto Polyline para a rota
 let googleMapsApiLoaded = false; // Flag para saber se a API do Google Maps carregou
 
+
+// Variáveis para o reconhecimento de fala
+let recognition; // Variável para a instância do SpeechRecognition
+
+// Função para exibir mensagens na tela de Definir Destino
+function displaySpeechStatus(message, isError = false) {
+    if (speechStatusMessage) {
+        speechStatusMessage.innerText = message;
+        speechStatusMessage.style.color = isError ? 'red' : 'inherit';
+    } else {
+        console.warn("Elemento speech-status-message não encontrado para exibir:", message);
+        if (isError) alert("Erro na fala: " + message); // Fallback para alert
+    }
+}
+
+// Função para inicializar o reconhecimento de fala
+function initializeSpeechRecognition() {
+    console.log("Tentando inicializar o reconhecimento de fala...");
+    // Verifica se a API é suportada pelo navegador
+    if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) {
+        console.warn("Reconhecimento de fala não suportado neste navegador.");
+
+        // Oculta o botão 'Falar Destino'
+        if (startSpeechRecognitionButton) {
+            startSpeechRecognitionButton.style.display = 'none';
+        }
+        displaySpeechStatus("Reconhecimento de voz não disponível neste navegador. Por favor, digite o destino acima.");
+
+        // *** MOSTRAR A MENSAGEM NA TELA ***
+        // Usamos o elemento 'currentDetailedInstruction' para feedback
+        //if (currentDetailedInstruction) {
+        //     currentDetailedInstruction.innerText = "Reconhecimento de voz não disponível neste navegador. Por favor, digite o destino acima.";
+        //     // Opcional: Adicionar uma classe ou estilo para destacar a mensagem de aviso
+        //     currentDetailedInstruction.style.color = '#cc0000'; // Exemplo: Cor vermelha para aviso
+        //     currentDetailedInstruction.style.fontWeight = 'bold'; // Exemplo: Negrito
+        //}
+
+        // Remover o alerta, pois a mensagem agora está na tela
+        // alert("Seu navegador não suporta reconhecimento de fala.");
+
+        return; // Sai da função se não for suportado
+    }
+    console.log("Reconhecimento de fala suportado. Inicializando API...");
+    // Se a API for suportada, resetamos o feedback de instrução para o estado padrão
+    // e garantimos que o botão 'Falar Destino' está visível (se foi ocultado antes)
+    recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = 'pt-BR';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+    recognition.continuous = false;
+
+    //
+    //if (currentDetailedInstruction) {
+    //     currentDetailedInstruction.innerText = "Digite o destino ou toque em 'Falar Destino'.";
+    //     currentDetailedInstruction.style.color = ''; // Remove cor customizada
+    //     currentDetailedInstruction.style.fontWeight = ''; // Remove negrito
+    //}
+    if (speechStatusMessage) {
+         speechStatusMessage.innerText = "Toque em 'Falar Destino' e comece a falar."; // Mensagem inicial para quem tem suporte
+         speechStatusMessage.style.color = ''; // Remove cor customizada
+         speechStatusMessage.style.fontWeight = ''; // Remove negrito
+    }
+    if (startSpeechRecognitionButton) {
+         startSpeechRecognitionButton.style.display = 'block'; // Garante que o botão aparece
+         startSpeechRecognitionButton.innerText = 'Falar Destino'; // Restaura texto
+         startSpeechRecognitionButton.disabled = false; // Restaura estado
+    }
+
+
+    // Cria a instância do reconhecimento (este código permanece igual)
+    
+    // ... (Restante dos event listeners: onstart, onresult, onnomatch, onend, onerror) ...
+
+    // Adiciona o event listener ao botão
+   
+
+    // Evento quando a fala começa a ser detectada
+    recognition.onstart = function() {
+        console.log('Reconhecimento de fala iniciado. Pode falar.');
+        // Altera o texto do botão ou adiciona um feedback visual
+        if (startSpeechRecognitionButton) {
+            startSpeechRecognitionButton.innerText = 'Ouvindo...';
+            startSpeechRecognitionButton.disabled = true; // Desabilita enquanto ouve
+        }
+        currentDetailedInstruction.innerText = "Ouvindo seu destino..."; // Feedback visual na tela
+        // Opcional: Adicionar um efeito visual (ex: mudar cor do input)
+        destinationInput.classList.add('listening');
+    };
+
+    // Evento quando um resultado é obtido
+    recognition.onresult = function(event) {
+        console.log('Resultado do reconhecimento de fala obtido.');
+        const speechResult = event.results[0][0].transcript;
+        console.log('Resultado: ' + speechResult);
+        
+        const lowerCaseSpeechResult = speechResult.toLowerCase()
+        // Coloca o texto reconhecido no campo de destino
+        destinationInput.value = speechResult;
+        currentDetailedInstruction.innerText = `Destino reconhecido: "${speechResult}"`; // Feedback visual
+         
+   
+        const navigationTriggerPhrases = [
+            'iniciar navegação',
+            'navegar',
+            'começar navegação',
+            'vamos', // Exemplo de comando mais curto
+            'rota' // Outro exemplo
+        ];
+        
+        let commandDetected = false;
+
+        for (const phrase of navigationTriggerPhrases) {
+            if (lowerCaseSpeechResult.includes(phrase)) {
+                commandDetected = true;
+                break; // Sai do loop assim que encontrar uma frase
+            }
+        }
+
+        if (commandDetected && destinationInput.value.trim() !== '') {
+            console.log('Comando de navegação detectado:', speechResult);
+            displaySpeechStatus(`Comando "${speechResult}" reconhecido. Iniciando navegação...`);
+
+            // Opcional: Remover a frase de comando do input se ela foi incluída
+            let finalDestination = destinationInput.value.trim();
+             for (const phrase of navigationTriggerPhrases) {
+                 finalDestination = finalDestination.replace(new RegExp(phrase, 'gi'), '').trim();
+             }
+             destinationInput.value = finalDestination; // Atualiza o input limpando a frase de comando
+
+            // *** CLICA PROGRAMATICAMENTE NO BOTÃO DE INICIAR NAVEGAÇÃO ***
+            // startNavigationButton já é a referência obtida no topo do script
+            if (startNavigationButton) {
+                 startNavigationButton.click(); // Simula um clique no botão
+                 console.log("Botão 'Iniciar Navegação' clicado via voz.");
+            } else {
+                 console.error("Botão 'Iniciar Navegação' não encontrado para clique via voz.");
+                 displaySpeechStatus("Erro interno: Não foi possível iniciar a navegação por voz.", true);
+            }
+
+        } else {
+            // Se nenhum comando foi detectado, apenas coloque o texto reconhecido no input
+            destinationInput.value = speechResult;
+            displaySpeechStatus(`Destino reconhecido: "${speechResult}". Toque em 'Iniciar Navegação'.`);
+             console.log("Destino preenchido via voz.");
+        }
+        // Restaura o botão e o input
+        if (startSpeechRecognitionButton) {
+            startSpeechRecognitionButton.innerText = 'Falar Destino';
+            startSpeechRecognitionButton.disabled = false;
+        }
+        destinationInput.classList.remove('listening'); // Remove efeito visual
+
+        // O reconhecimento para automaticamente depois de um resultado
+    };
+
+    // Evento quando não há fala detectada (ou fala muito curta)
+    recognition.onnomatch = function() {
+        console.log('Fala não reconhecida.');
+        currentDetailedInstruction.innerText = "Desculpe, não entendi. Tente novamente."; // Feedback visual
+         // Restaura o botão e o input
+        if (startSpeechRecognitionButton) {
+            startSpeechRecognitionButton.innerText = 'Falar Destino';
+            startSpeechRecognitionButton.disabled = false;
+        }
+        destinationInput.classList.remove('listening'); // Remove efeito visual
+    };
+
+    // Evento quando o reconhecimento termina
+    recognition.onend = function() {
+        console.log('Reconhecimento de fala finalizado.');
+        // Garante que o botão e o input sejam restaurados se não foram antes (ex: em caso de erro inesperado)
+        if (startSpeechRecognitionButton) {
+             startSpeechRecognitionButton.innerText = 'Falar Destino';
+             startSpeechRecognitionButton.disabled = false;
+        }
+         destinationInput.classList.remove('listening'); // Remove efeito visual
+
+         // O feedback visual na tela pode ser removido ou atualizado
+        if (speechStatusMessage && speechStatusMessage.innerText === "Ouvindo seu destino...") {
+              displaySpeechStatus("Pronto para falar destino.");
+        }
+    };
+
+    // Evento de erro
+    recognition.onerror = function(event) {
+        console.error('Erro no reconhecimento de fala:', event.error, event);
+        let errorMessage = `Erro no reconhecimento de fala: ${event.error}`;
+        switch (event.error) {
+            case 'no-speech':
+                errorMessage = "Nenhuma fala detectada. Tente novamente.";
+                break;
+            case 'audio-capture':
+                errorMessage = "Erro ao acessar o microfone. Verifique as permissões do navegador e do sistema.";
+                break;
+            case 'not-allowed':
+                errorMessage = "Permissão para usar o microfone negada. Por favor, permita o acesso nas configurações do navegador.";
+                 // Pode instruir o usuário a como reativar a permissão
+                 break;
+            case 'network':
+                errorMessage = "Erro de rede no reconhecimento de fala. Verifique sua conexão com a internet.";
+                break;
+            case 'service-not-allowed':
+                 errorMessage = "O serviço de reconhecimento de fala não está permitido. Pode ser uma configuração do navegador ou restrição de segurança.";
+                 break;
+            case 'bad-grammar':
+                 errorMessage = "Erro de gramática na resposta do reconhecimento.";
+                 break;
+            default:
+                errorMessage = `Erro desconhecido: ${event.error}`;
+                break;
+        }
+        currentDetailedInstruction.innerText = errorMessage; // Feedback visual do erro
+        alert(`Erro na fala: ${errorMessage}`); // Alerta para garantir que o usuário veja
+
+        // Restaura o botão e o input em caso de erro
+         if (startSpeechRecognitionButton) {
+            startSpeechRecognitionButton.innerText = 'Falar Destino';
+            startSpeechRecognitionButton.disabled = false;
+        }
+         destinationInput.classList.remove('listening'); // Remove efeito visual
+    };
+
+    // Adiciona o event listener ao botão
+    if (startSpeechRecognitionButton) {
+        startSpeechRecognitionButton.addEventListener('click', function() {
+            console.log("Botão 'Falar Destino' clicado. Tentando iniciar reconhecimento.");
+            // Verifica se já está ouvindo para evitar iniciar múltiplas instâncias
+            // O estado 'listening' pode ser verificado por uma flag interna ou pelo estado do botão/UI
+             if (startSpeechRecognitionButton.disabled) {
+                  console.log("Reconhecimento já em progresso, ignorando clique.");
+                  return;
+             }
+             if (!recognition) {
+                  console.error("Erro interno: Objeto 'recognition' não foi inicializado corretamente.");
+                  displaySpeechStatus("Erro ao iniciar reconhecimento. A API de voz pode não estar pronta ou suportada inesperadamente.", true);
+                  // Pode desabilitar o botão aqui se necessário
+                  return; // Sai se recognition não for um objeto válido
+             }
+             try {
+                recognition.start();
+                console.log("Chamado recognition.start()");
+                displaySpeechStatus("Iniciando reconhecimento...");
+             } catch (e) {
+                console.error("Erro ao chamar recognition.start():", e);
+                currentDetailedInstruction.innerText = `Não foi possível iniciar a fala. ${e.message || e}`;
+                alert(`Não foi possível iniciar a fala: ${e.message || e}. Verifique o suporte do navegador e as permissões.`);
+                 // Garante que o botão não fique desabilitado se start falhar imediatamente
+                 if (startSpeechRecognitionButton) {
+                    startSpeechRecognitionButton.innerText = 'Falar Destino';
+                    startSpeechRecognitionButton.disabled = false;
+                }
+             }
+        });
+         console.log("Event listener adicionado ao botão 'Falar Destino'.");
+    } else {
+        console.error("Botão com ID 'start-speech-recognition' não encontrado no HTML.");
+    }
+}
 // Função para carregar a API do Google Maps dinamicamente
 async function loadGoogleMapsApi() {
     console.log("loadGoogleMapsApi chamado.");
@@ -226,8 +487,9 @@ function showMainNavigation() {
 function showSetDestination() {
     console.log("showSetDestination chamado."); // Log na função
     showScreen('set-destination');
-    currentDetailedInstruction.innerText = "Preparando para definir destino...";
-     console.log("showSetDestination concluído."); // Log final da função
+    //currentDetailedInstruction.innerText = "Preparando para definir destino...";
+    initializeSpeechRecognition(); 
+    console.log("showSetDestination concluído."); // Log final da função
 }
 
 async function startNavigation() {
