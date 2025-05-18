@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BlindView</title>
+</head>
+<body>
+    <h1>BlindView - Navegação Acessível</h1>
+    <form id="navigationForm">
+        <div>
+            <label for="latitude">Latitude:</label>
+            <input type="number" step="any" id="latitude" name="latitude" required><br><br>
+        </div>
+        <div>
+            <label for="longitude">Longitude:</label>
+            <input type="number" step="any" id="longitude" name="longitude" required><br><br>
+        </div>
+        <div>
+            <label for="destination">Destino:</label>
+            <input type="text" id="destination" name="destination" required><br><br>
+        </div>
+        <button type="button" onclick="requestNavigation()">Obter Instruções</button>
+    </form>
+
+    <div id="instructions"></div>
+    <div id="notification"></div>
+
+    <script>
+        async function requestNavigation() {
+            const latitude = document.getElementById("latitude").value;
+            const longitude = document.getElementById("longitude").value;
+            const destination = document.getElementById("destination").value;
+
+            const data = {
+                latitude: parseFloat(latitude),
+                longitude: parseFloat(longitude),
+                destination: destination
+            };
+
+            try {
+                const response = await fetch("http://127.0.0.1:8000/navigate/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    document.getElementById("instructions").innerText = "Instruções: " + result.instructions;
+                    document.getElementById("notification").innerText = "Notificações enviadas (simulação)!";
+                } else {
+                    const error = await response.json();
+                    document.getElementById("instructions").innerText = "Erro: " + error.detail;
+                    document.getElementById("notification").innerText = "";
+                }
+            } catch (error) {
+                document.getElementById("instructions").innerText = "Erro na requisição: " + error;
+                document.getElementById("notification").innerText = "";
+            }
+        }
+    </script>
+</body>
+</html>

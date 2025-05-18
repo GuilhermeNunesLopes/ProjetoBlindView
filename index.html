@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartPath - Navegação Acessível</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Adicione estilos para o contêiner do mapa */
+        #map {
+            height: 400px;
+            /* Defina uma altura para o mapa ser visível */
+            width: 100%;
+            margin-bottom: 20px;
+            display: none;
+            /* Inicialmente oculto, será mostrado pelo JS */
+        }
+    </style>
+    </head>
+
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>SmartPath</h1>
+        </header>
+
+        <main class="app-main">
+            <section id="main-navigation" class="screen active">
+                <h2>Onde você quer ir?</h2>
+                <button class="large-button primary" onclick="showSetDestination()">Definir Destino</button>
+                <button class="large-button secondary" onclick="showSettings()">Configurações</button>
+            </section>
+
+            <section id="set-destination" class="screen">
+                <h2>Definir Destino</h2>
+                <div class="input-group">
+                    <center><label for="destination-input">Destino:</label></center>
+                    <center><input type="text" id="destination-input" placeholder="Digite o destino"></center>
+                </div>
+                <div class="button-group">
+                    <button class="large-button primary" onclick="startNavigation()">Iniciar Navegação</button>
+                    <button class="large-button secondary" onclick="showMainNavigation()">Voltar</button>
+                </div>
+                <div id="loading-indicator" class="loading-indicator">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="45" stroke="#007bff" stroke-width="5" fill="none">
+                            <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50"
+                                dur="1s" repeatCount="indefinite" />
+                        </circle>
+                    </svg>
+                </div>
+            </section>
+
+            <section id="navigation-screen" class="screen">
+                <h2>Carregando Navegação</h2>
+                <div id="map"></div>
+                <div id="detailed-instructions-container" class="detailed-instructions">
+                    <p id="current-detailed-instruction">Aguardando instruções detalhadas...</p>
+                    <ul id="next-steps" aria-live="polite">
+                    </ul>
+                </div>
+                <div class="button-group">
+                    <button class="large-button action" onclick="shareLocation()">Compartilhar Localização</button>
+                    <button class="large-button secondary" onclick="showMainNavigation()">Parar</button>
+                </div>
+            </section>
+
+            <section id="settings-screen" class="screen">
+                <h2>Configurações</h2>
+                <div class="setting-item">
+                    <label for="font-size-slider">Tamanho da Fonte:</label>
+                    <input type="range" id="font-size-slider" min="16" max="24" value="18"
+                        oninput="adjustFontSize(this.value)">
+                    <span id="font-size-value">18px</span>
+                </div>
+                <div class="setting-item">
+                    <label for="contrast-select">Tema de Contraste:</label>
+                    <select id="contrast-select" onchange="applyContrast(this.value)">
+                        <option value="normal">Normal</option>
+                        <option value="high">Alto Contraste</option>
+                    </select>
+                </div>
+                <button class="large-button secondary" onclick="showMainNavigation()">Voltar</button>
+            </section>
+        </main>
+
+        <footer class="app-footer">
+            <p>© 2025 SmartPath - Navegação Acessível</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

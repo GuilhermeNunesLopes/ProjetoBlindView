@@ -1,0 +1,279 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    background-color: #f4f4f4;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.app-container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 90%;
+    max-width: 1000px;
+}
+
+.app-header {
+    background-color: #007bff;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.app-main {
+    padding: 20px 20px;
+}
+
+.screen {
+    display: none;
+    width: 100%
+}
+
+.screen.active {
+    display: block;
+    width: 100%
+}
+
+h2 {
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.large-button {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    text-decoration: none;
+}
+
+.primary {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.secondary {
+    background-color: #f8f9fa;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.action {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.large-button:hover {
+    opacity: 0.9;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    padding: -10px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.input-group input[type="text"] {
+    width: 100%;
+    padding-bottom: 10px ;
+    padding-top: 10px ;
+    padding-right: -30px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    align-content: center;
+    font-size: 1em;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.instructions {
+    background-color: #e9ecef;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 1.1em;
+    text-align: center;
+}
+
+.setting-item {
+    margin-bottom: 20px;
+}
+
+.setting-item label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.setting-item input[type="range"],
+.setting-item select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.app-footer {
+    text-align: center;
+    padding: 15px;
+    background-color: #f4f4f4;
+    color: #777;
+    font-size: 0.9em;
+}
+
+/* Estilos para Alto Contraste */
+.high-contrast body {
+    background-color: #000;
+    color: #fff;
+}
+
+.high-contrast .app-container {
+    background-color: #333;
+    box-shadow: 0 2px 10px rgba(255, 255, 255, 0.2);
+}
+
+.high-contrast .app-header {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.high-contrast h2 {
+    color: #eee;
+}
+
+.high-contrast .large-button.primary {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.high-contrast .large-button.secondary {
+    background-color: #555;
+    color: #eee;
+    border-color: #777;
+}
+
+.high-contrast .large-button.action {
+    background-color: #198754;
+    color: #fff;
+}
+
+.high-contrast .input-group label,
+.high-contrast .setting-item label {
+    color: #ccc;
+}
+
+.high-contrast .input-group input[type="text"],
+.high-contrast .setting-item input[type="range"],
+.high-contrast .setting-item select {
+    background-color: #444;
+    color: #eee;
+    border-color: #666;
+}
+
+.high-contrast .instructions {
+    background-color: #444;
+    color: #eee;
+}
+
+.high-contrast .app-footer {
+    background-color: #333;
+    color: #aaa;
+}
+
+
+.detailed-instructions {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 1em;
+    text-align: left;
+    border: 1px solid #eee;
+    /* Adicionado para melhor espaçamento e quebra de linha */
+    white-space: pre-line;
+    word-wrap: break-word;
+}
+
+.detailed-instructions p#current-detailed-instruction {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.detailed-instructions ul#next-steps {
+    list-style-type: disc;
+    padding-left: 20px;
+    color: #555;
+}
+
+.detailed-instructions ul#next-steps li {
+    margin-bottom: 5px;
+}
+
+.high-contrast .detailed-instructions {
+    background-color: #444;
+    color: #eee;
+    border-color: #666;
+}
+
+.high-contrast .detailed-instructions p#current-detailed-instruction {
+    color: #fff;
+}
+
+.high-contrast .detailed-instructions ul#next-steps {
+    color: #ccc;
+}
+
+/* Estilos para o ícone de loading */
+.loading-indicator {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 20px; /* Adicionado para espaçamento */
+    display: none
+}
+
+.loading-indicator svg {
+    width: 30px;
+    height: 30px;
+    animation: rotate 1s linear infinite; /* Se você estiver usando a animação do SVG */
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Adicionado para garantir que o contêiner do mapa seja visível e tenha tamanho */
+#map {
+    height: 400px; /* Altura do mapa */
+    width: 100%; /* Largura do mapa */
+    margin-bottom: 20px;
+    background-color: #e0e0e0; /* Cor de fundo enquanto carrega */
+}
