@@ -91,6 +91,7 @@ O diagrama abaixo ilustra a interação entre os componentes da aplicação:
 
 ![SmartPath](Diagrama.png)
 
+## Exemplos das Telas
 ![SmartPath Tela Inicial](App.png)
 ![SmartPath Tela de CarregandoRota](CarregandoRota.png)
 ![SmartPath Tela de Rota Definida](RotaDefinida.png)
