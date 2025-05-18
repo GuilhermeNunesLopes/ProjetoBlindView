@@ -47,6 +47,9 @@ Um foco significativo do projeto é a **interação sem digitação** e as **fun
     * Google Gemini API (opcional, se configurado e usado)
     * Google Cloud Text-to-Speech API (opcional)
 
+## GitHub Pages:
+https://guilhermenuneslopes.github.io/ProjetoSmartPath/
+
 ## Configuração e Execução
 
 Para configurar e rodar o SmartPath localmente, siga os passos abaixo:
